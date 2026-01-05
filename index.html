@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Just for You 💖</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(180deg, #ffe6ee, #fff);
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    section {
+      min-height: 100vh;
+      padding: 64px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    h1, h2 {
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    p {
+      max-width: 320px;
+      line-height: 1.6;
+      opacity: 0.85;
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: all 0.8s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .heart {
+      font-size: 32px;
+      animation: pulse 1.8s infinite;
+      margin-bottom: 16px;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    /* Calendar */
+    .calendar {
+      position: relative;
+      width: 200px;
+      height: 160px;
+      perspective: 1000px;
+      margin: 24px 0;
+    }
+
+    .page {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 32px;
+      font-weight: 600;
+      backface-visibility: hidden;
+      transform-origin: left center;
+    }
+
+    .page.flip {
+      animation: flip 0.6s forwards;
+    }
+
+    @keyframes flip {
+      0% { transform: rotateY(0deg); }
+      100% { transform: rotateY(-180deg); }
+    }
+
+    .final {
+      font-size: 22px;
+      padding: 0 16px;
+    }
+
+    button {
+      margin-top: 24px;
+      padding: 14px 28px;
+      border-radius: 999px;
+      border: none;
+      background: #ff5a8a;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 10px 24px rgba(255,90,138,0.35);
+    }
+
+    button:active {
+      transform: scale(0.96);
+      box-shadow: 0 6px 16px rgba(255,90,138,0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Section 1 -->
+  <section>
+    <div class="heart">💗</div>
+    <h1 class="fade-up">Hey {{NAME}}</h1>
+    <p class="fade-up">I made something small… but meaningful. Scroll slowly ✨</p>
+  </section>
+
+  <!-- Section 2 -->
+  <section>
+    <h2 class="fade-up">Every story has a date</h2>
+    <p class="fade-up">Some days are just days. Some become special.</p>
+  </section>
+
+  <!-- Section 3: Calendar -->
+  <section>
+    <h2 class="fade-up">Let’s go there 📅</h2>
+    <div class="calendar" id="calendar">
+      <div class="page" id="page">1</div>
+    </div>
+    <p class="fade-up">Watch closely…</p>
+  </section>
+
+  <!-- Section 4 -->
+  <section>
+    <h2 class="fade-up">{{SPECIAL_DATE}}</h2>
+    <p class="fade-up final">So… would you like to go out with me? 💕</p>
+    <button onclick="yesClicked()">Yes 😌</button>
+  </section>
+
+  <script>
+    // Fade-in on scroll
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // Calendar flip logic
+    const page = document.getElementById('page');
+    let day = 1;
+    const targetDay = {{TARGET_DAY}}; // change this
+
+    const flipInterval = setInterval(() => {
+      if (day >= targetDay) {
+        clearInterval(flipInterval);
+        page.textContent = '💖';
+        return;
+      }
+      page.classList.remove('flip');
+      void page.offsetWidth; // reset animation
+      page.classList.add('flip');
+      day++;
+      page.textContent = day;
+    }, 500);
+
+    function yesClicked() {
+      alert('Okay… this just became my favorite day 🥰');
+    }
+  </script>
+</body>
+</html>
